@@ -47,6 +47,11 @@ jobs:
       - name: Type check
         run: uv run mypy src/
 
+      - name: Migrate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/portfolio_manager
+        run: uv run alembic upgrade head
+
       - name: Test
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/portfolio_manager
