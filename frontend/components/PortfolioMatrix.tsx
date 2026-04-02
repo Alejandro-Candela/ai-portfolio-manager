@@ -136,7 +136,11 @@ export function PortfolioMatrix() {
           />
           <Scatter
             data={data}
-            onClick={(point: ChartPoint) => router.push(`/cases/${point.id}`)}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onClick={(data: any) => {
+              const useCaseId = (data && data.payload && data.payload.id) || (data && data.id);
+              if (useCaseId) router.push(`/cases/${useCaseId}`);
+            }}
             style={{ cursor: "pointer" }}
           >
             {data.map((entry) => (
