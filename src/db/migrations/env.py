@@ -25,11 +25,16 @@ target_metadata = Base.metadata
 
 
 def get_url() -> str:
-    url = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/portfolio_manager")
+    url = os.environ.get(
+        "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/portfolio_manager"
+    )
     # Use psycopg3 async driver
     if url.startswith("postgresql://") or url.startswith("postgres://"):
-        url = url.replace("postgresql://", "postgresql+psycopg://", 1).replace("postgres://", "postgresql+psycopg://", 1)
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1).replace(
+            "postgres://", "postgresql+psycopg://", 1
+        )
     return url
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

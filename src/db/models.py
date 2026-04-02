@@ -98,9 +98,7 @@ class UseCase(Base):
     available_data = Column(Text, nullable=False, default="")
     expected_outcome = Column(Text, nullable=False, default="")
     urgency = Column(Enum(Urgency), nullable=False, default=Urgency.medium)
-    status = Column(
-        Enum(UseCaseStatus), nullable=False, default=UseCaseStatus.new, index=True
-    )
+    status = Column(Enum(UseCaseStatus), nullable=False, default=UseCaseStatus.new, index=True)
     composite_score = Column(Float, nullable=True)
     created_by = Column(String, nullable=False)  # user id
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -111,8 +109,12 @@ class UseCase(Base):
         nullable=False,
     )
 
-    evaluations = relationship("Evaluation", back_populates="use_case", cascade="all, delete-orphan")
-    business_cases = relationship("BusinessCase", back_populates="use_case", cascade="all, delete-orphan")
+    evaluations = relationship(
+        "Evaluation", back_populates="use_case", cascade="all, delete-orphan"
+    )
+    business_cases = relationship(
+        "BusinessCase", back_populates="use_case", cascade="all, delete-orphan"
+    )
 
 
 class Evaluation(Base):
@@ -148,11 +150,11 @@ class BusinessCase(Base):
     risks_and_mitigations = Column(Text, nullable=False, default="")
     timeline = Column(Text, nullable=False, default="")
     recommendation = Column(
-        Enum(BusinessCaseRecommendation), nullable=False, default=BusinessCaseRecommendation.conditional
+        Enum(BusinessCaseRecommendation),
+        nullable=False,
+        default=BusinessCaseRecommendation.conditional,
     )
-    status = Column(
-        Enum(BusinessCaseStatus), nullable=False, default=BusinessCaseStatus.draft
-    )
+    status = Column(Enum(BusinessCaseStatus), nullable=False, default=BusinessCaseStatus.draft)
     langgraph_thread_id = Column(String, nullable=True)  # for HITL resume
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(

@@ -1,4 +1,5 @@
 """Development seed data — only runs when DEV_AUTH_BYPASS=true."""
+
 from __future__ import annotations
 
 import logging

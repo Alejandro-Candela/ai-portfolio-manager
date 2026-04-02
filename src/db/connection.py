@@ -51,7 +51,5 @@ async def get_connection(
     async with pool.connection() as conn:
         conn.row_factory = dict_row
         if tenant_id:
-            await conn.execute(
-                "SELECT set_config('app.tenant_id', %s, true)", (tenant_id,)
-            )
+            await conn.execute("SELECT set_config('app.tenant_id', %s, true)", (tenant_id,))
         yield conn

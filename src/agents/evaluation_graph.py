@@ -5,6 +5,7 @@ collects results (fan-in), then persists to DB.
 Graph shape:
   START → prepare → [Send to each evaluator] → collect → persist → END
 """
+
 from __future__ import annotations
 
 import logging
@@ -36,10 +37,7 @@ EVALUATORS = {
 
 def route_to_evaluators(state: EvaluationGraphState) -> list[Send]:
     """Fan-out: send use case to all 4 evaluators in parallel."""
-    return [
-        Send(f"evaluate_{dim}", EvaluatorState(use_case=state.use_case))
-        for dim in EVALUATORS
-    ]
+    return [Send(f"evaluate_{dim}", EvaluatorState(use_case=state.use_case)) for dim in EVALUATORS]
 
 
 async def _run_evaluator(evaluator_fn: Any, state: EvaluatorState) -> dict:

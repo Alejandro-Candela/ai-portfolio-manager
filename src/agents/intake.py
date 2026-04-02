@@ -4,6 +4,7 @@ Intake graph: conversational agent that extracts use case details.
 Uses MessagesState + a tool call / structured output to detect completion.
 Exposed via AG-UI through add_langgraph_fastapi_endpoint.
 """
+
 from __future__ import annotations
 
 import json

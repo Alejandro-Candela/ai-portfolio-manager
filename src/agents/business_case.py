@@ -5,6 +5,7 @@ Graph shape:
   START → write → critique → [approved?] → hitl_review (interrupt) → END
                      ↑_________________________|no (max 2 iterations)
 """
+
 from __future__ import annotations
 
 import json
@@ -34,20 +35,19 @@ def _build_context(state: BusinessCaseState) -> str:
     evals = state.get("evaluations", [])
 
     eval_summary = "\n".join(
-        f"- {e.dimension.title()}: {e.score}/10 — {e.justification}"
-        for e in evals
+        f"- {e.dimension.title()}: {e.score}/10 — {e.justification}" for e in evals
     )
 
     return f"""
 Use Case: {uc.title}
 Problem: {uc.problem_statement}
 Urgency: {uc.urgency}
-Stakeholders: {', '.join(uc.stakeholders) if uc.stakeholders else 'Not specified'}
-Available Data: {uc.available_data or 'Not specified'}
-Expected Outcome: {uc.expected_outcome or 'Not specified'}
+Stakeholders: {", ".join(uc.stakeholders) if uc.stakeholders else "Not specified"}
+Available Data: {uc.available_data or "Not specified"}
+Expected Outcome: {uc.expected_outcome or "Not specified"}
 
 Evaluation Scores:
-{eval_summary or 'No evaluations available'}
+{eval_summary or "No evaluations available"}
 """.strip()
 
 

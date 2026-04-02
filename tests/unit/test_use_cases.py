@@ -31,9 +31,7 @@ async def test_create_and_get_use_case(client: AsyncClient) -> None:
     assert use_case_id in ids
 
     # Patch status
-    resp = await client.patch(
-        f"/api/use-cases/{use_case_id}", json={"status": "evaluating"}
-    )
+    resp = await client.patch(f"/api/use-cases/{use_case_id}", json={"status": "evaluating"})
     assert resp.status_code == 200
     assert resp.json()["status"] == "evaluating"
 

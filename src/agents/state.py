@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 class EvaluationResult(BaseModel):
     dimension: str  # security | feasibility | cost | value
-    score: float    # 1-10
+    score: float  # 1-10
     justification: str
 
 

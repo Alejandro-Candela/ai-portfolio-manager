@@ -45,13 +45,13 @@ async def trigger_evaluation(
         stakeholders=json.loads(row["stakeholders"]) if row["stakeholders"] else [],
         available_data=row["available_data"] or "",
         expected_outcome=row["expected_outcome"] or "",
-        urgency=str(row["urgency"].value) if hasattr(row["urgency"], "value") else str(row["urgency"]),
+        urgency=str(row["urgency"].value)
+        if hasattr(row["urgency"], "value")
+        else str(row["urgency"]),
         tenant_id=current_user.tenant_id,
     )
 
-    background_tasks.add_task(
-        _run_and_store_evaluation, use_case, current_user.tenant_id
-    )
+    background_tasks.add_task(_run_and_store_evaluation, use_case, current_user.tenant_id)
 
     return {"message": "Evaluation started", "use_case_id": use_case_id}
 

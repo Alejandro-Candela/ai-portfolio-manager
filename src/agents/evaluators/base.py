@@ -36,13 +36,13 @@ Problem Statement:
 Description:
 {use_case.description}
 
-Stakeholders: {', '.join(use_case.stakeholders) if use_case.stakeholders else 'Not specified'}
+Stakeholders: {", ".join(use_case.stakeholders) if use_case.stakeholders else "Not specified"}
 
 Available Data:
-{use_case.available_data or 'Not specified'}
+{use_case.available_data or "Not specified"}
 
 Expected Outcome:
-{use_case.expected_outcome or 'Not specified'}
+{use_case.expected_outcome or "Not specified"}
 
 Urgency: {use_case.urgency}
 

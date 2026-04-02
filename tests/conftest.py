@@ -5,7 +5,9 @@ from httpx import ASGITransport, AsyncClient
 
 # Ensure test env vars are set before app imports
 os.environ.setdefault("DEV_AUTH_BYPASS", "true")
-os.environ.setdefault("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/portfolio_manager")
+os.environ.setdefault(
+    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/portfolio_manager"
+)
 os.environ.setdefault("APP_ENV", "test")
 
 from src.api.main import app

@@ -71,7 +71,9 @@ async def list_use_cases(
         # Cast enum values to str
         for field in ("urgency", "status"):
             if row.get(field):
-                row[field] = str(row[field].value) if hasattr(row[field], "value") else str(row[field])
+                row[field] = (
+                    str(row[field].value) if hasattr(row[field], "value") else str(row[field])
+                )
 
     return rows
 

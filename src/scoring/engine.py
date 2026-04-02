@@ -30,7 +30,11 @@ async def _get_weights(tenant_id: str) -> dict[str, float]:
 
         weights: dict[str, float] = {}
         for row in rows:
-            dim = str(row["dimension"].value) if hasattr(row["dimension"], "value") else str(row["dimension"])
+            dim = (
+                str(row["dimension"].value)
+                if hasattr(row["dimension"], "value")
+                else str(row["dimension"])
+            )
             weights[dim] = float(row["weight"])
         return weights
 

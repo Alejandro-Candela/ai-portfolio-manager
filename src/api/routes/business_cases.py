@@ -45,12 +45,16 @@ async def _load_use_case_and_evals(
         stakeholders=json.loads(uc_row["stakeholders"]) if uc_row["stakeholders"] else [],
         available_data=uc_row["available_data"] or "",
         expected_outcome=uc_row["expected_outcome"] or "",
-        urgency=str(uc_row["urgency"].value) if hasattr(uc_row["urgency"], "value") else str(uc_row["urgency"]),
+        urgency=str(uc_row["urgency"].value)
+        if hasattr(uc_row["urgency"], "value")
+        else str(uc_row["urgency"]),
         tenant_id=tenant_id,
     )
     evaluations = [
         EvaluationResult(
-            dimension=str(r["dimension"].value) if hasattr(r["dimension"], "value") else str(r["dimension"]),
+            dimension=str(r["dimension"].value)
+            if hasattr(r["dimension"], "value")
+            else str(r["dimension"]),
             score=float(r["score"]),
             justification=r["justification"],
         )
@@ -69,7 +73,12 @@ async def generate_business_case(
 
     thread_id = str(uuid.uuid4())
     background_tasks.add_task(
-        _run_business_case_graph, use_case, evaluations, use_case_id, current_user.tenant_id, thread_id
+        _run_business_case_graph,
+        use_case,
+        evaluations,
+        use_case_id,
+        current_user.tenant_id,
+        thread_id,
     )
     return {"message": "Business case generation started", "thread_id": thread_id}
 
@@ -237,7 +246,9 @@ async def request_more_info(
     body: DecisionBody,
     current_user: Annotated[CurrentUser, Depends(get_current_user)],
 ) -> dict[str, str]:
-    return await _handle_hitl_decision(use_case_id, current_user.tenant_id, "request_info", body.reason)
+    return await _handle_hitl_decision(
+        use_case_id, current_user.tenant_id, "request_info", body.reason
+    )
 
 
 async def _handle_hitl_decision(
@@ -255,8 +266,16 @@ async def _handle_hitl_decision(
             if not await cur.fetchone():
                 raise HTTPException(status_code=404, detail="Use case not found")
 
-            new_bc_status = "approved" if decision == "approve" else ("rejected" if decision == "reject" else "draft")
-            new_uc_status = "approved" if decision == "approve" else ("rejected" if decision == "reject" else "review")
+            new_bc_status = (
+                "approved"
+                if decision == "approve"
+                else ("rejected" if decision == "reject" else "draft")
+            )
+            new_uc_status = (
+                "approved"
+                if decision == "approve"
+                else ("rejected" if decision == "reject" else "review")
+            )
 
             await cur.execute(
                 """

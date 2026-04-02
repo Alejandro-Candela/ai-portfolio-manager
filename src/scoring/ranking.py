@@ -25,8 +25,12 @@ async def get_ranked_use_cases(tenant_id: str) -> list[dict]:
                 "rank": i + 1,
                 "id": row["id"],
                 "title": row["title"],
-                "status": str(row["status"].value) if hasattr(row["status"], "value") else str(row["status"]),
-                "urgency": str(row["urgency"].value) if hasattr(row["urgency"], "value") else str(row["urgency"]),
+                "status": str(row["status"].value)
+                if hasattr(row["status"], "value")
+                else str(row["status"]),
+                "urgency": str(row["urgency"].value)
+                if hasattr(row["urgency"], "value")
+                else str(row["urgency"]),
                 "composite_score": row["composite_score"],
                 "created_at": row["created_at"].isoformat(),
             }
