@@ -69,6 +69,17 @@ def create_app() -> FastAPI:
         path="/api/copilotkit",
     )
 
+    @app.get("/api/copilotkit")
+    async def copilotkit_discovery_get():
+        """Discovery endpoint for CopilotKit agent discovery."""
+        return {
+            "agents": {
+                "default": {
+                    "description": "Use case intake agent",
+                }
+            }
+        }
+
     @app.get("/api/copilotkit/info")
     async def copilotkit_discovery():
         """Metadata for CopilotKit agent discovery."""
