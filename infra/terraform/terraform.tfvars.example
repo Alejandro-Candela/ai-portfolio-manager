@@ -1,0 +1,16 @@
+subscription_id = "YOUR_SUBSCRIPTION_ID"  # az account show --query id -o tsv
+location        = "westeurope"
+project         = "aiportfolio"
+env             = "dev"
+
+# Postgres – leave blank to auto-generate a secure password
+postgres_admin_user     = "pgadmin"
+postgres_admin_password = ""
+db_name                 = "portfolio_manager"
+
+# OpenAI deployment names – must match what you create in Azure AI Foundry
+openai_gpt4o_deployment  = "gpt-4o"
+openai_o3mini_deployment = "o3-mini"
+
+# TPM capacity (x1000). 1 = 1 000 TPM, fine for PoC.
+openai_tpm_capacity = 1

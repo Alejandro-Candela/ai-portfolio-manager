@@ -2,9 +2,11 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Any
 
+from ag_ui_langgraph import LangGraphAgent, add_langgraph_fastapi_endpoint
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.agents.intake import intake_graph
 from src.api.routes.analytics import router as analytics_router
 from src.api.routes.business_cases import router as business_cases_router
 from src.api.routes.evaluations import router as evaluations_router
@@ -22,15 +24,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, Any]:
 
     if settings.dev_auth_bypass:
         await seed_dev_tenant(settings.dev_tenant_id)
-
-    # TODO (Sprint 2): Register AG-UI endpoint for intake graph
-    # from ag_ui_langgraph import add_langgraph_fastapi_endpoint, LangGraphAgent
-    # from src.agents.intake import intake_graph
-    # add_langgraph_fastapi_endpoint(
-    #     app=app,
-    #     agent=LangGraphAgent(name="intake_agent", description="Use case intake", graph=intake_graph),
-    #     path="/api/copilotkit",
-    # )
 
     yield
 
@@ -63,6 +56,18 @@ def create_app() -> FastAPI:
     app.include_router(evaluations_router, prefix="/api")
     app.include_router(business_cases_router, prefix="/api")
     app.include_router(analytics_router, prefix="/api")
+
+    # Register AG-UI / CopilotKit intake agent endpoint
+    # Routes must be added at app creation time, not inside lifespan
+    add_langgraph_fastapi_endpoint(
+        app=app,
+        agent=LangGraphAgent(
+            name="default",
+            description="Use case intake agent",
+            graph=intake_graph,
+        ),
+        path="/api/copilotkit",
+    )
 
     return app
 
