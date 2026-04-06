@@ -3,24 +3,22 @@ import {
   copilotRuntimeNextJSAppRouterEndpoint,
   ExperimentalEmptyAdapter,
 } from "@copilotkit/runtime";
+import { HttpAgent } from "@ag-ui/client";
 import { NextRequest } from "next/server";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 const runtime = new CopilotRuntime({
-  remoteEndpoints: [
-    {
+  agents: {
+    default: new HttpAgent({
       url: `${BACKEND_URL}/api/copilotkit`,
-      name: "default",
-      description: "Use case intake agent",
-    },
-  ],
+    }),
+  },
 });
 
 const serviceAdapter = new ExperimentalEmptyAdapter();
 
 const handler = async (req: NextRequest) => {
-  // For discovery requests, delegate to CopilotRuntime which handles the protocol
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
     serviceAdapter,
