@@ -74,17 +74,11 @@ async def intake_chat_node(state: IntakeState) -> dict:
     return update
 
 
-def should_continue(state: IntakeState) -> str:
-    if state.get("extraction_complete"):
-        return END
-    return "intake_chat"
-
-
 def build_intake_graph() -> Any:
     builder = StateGraph(IntakeState)
     builder.add_node("intake_chat", intake_chat_node)
     builder.add_edge(START, "intake_chat")
-    builder.add_conditional_edges("intake_chat", should_continue)
+    builder.add_edge("intake_chat", END)
     return builder.compile(checkpointer=MemorySaver())
 
 
