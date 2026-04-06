@@ -48,3 +48,4 @@ coverage.xml
 .terraform/
 .terraform.lock.hcl
 infra/terraform/terraform.tfvars
+.playwright-mcp
