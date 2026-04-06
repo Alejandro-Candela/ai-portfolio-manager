@@ -2,18 +2,19 @@ import {
   CopilotRuntime,
   copilotRuntimeNextJSAppRouterEndpoint,
   ExperimentalEmptyAdapter,
-  HttpAgent,
 } from "@copilotkit/runtime";
 import { NextRequest } from "next/server";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 const runtime = new CopilotRuntime({
-  agents: {
-    default: new HttpAgent({
+  remoteEndpoints: [
+    {
       url: `${BACKEND_URL}/api/copilotkit`,
-    }),
-  },
+      name: "default",
+      description: "Use case intake agent",
+    },
+  ],
 });
 
 const serviceAdapter = new ExperimentalEmptyAdapter();
