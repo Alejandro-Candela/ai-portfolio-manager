@@ -24,10 +24,10 @@ from src.db.models import Base
 target_metadata = Base.metadata
 
 
+from src.config.settings import get_settings
+
 def get_url() -> str:
-    url = os.environ.get(
-        "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/portfolio_manager"
-    )
+    url = get_settings().database_url
     # Use psycopg3 async driver
     if url.startswith("postgresql://") or url.startswith("postgres://"):
         url = url.replace("postgresql://", "postgresql+psycopg://", 1).replace(

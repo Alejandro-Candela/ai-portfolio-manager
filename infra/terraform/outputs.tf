@@ -41,7 +41,7 @@ output "postgres_admin_password" {
 
 output "database_url" {
   description = "Full PostgreSQL connection string (with sslmode=require for Azure)"
-  value       = "postgresql://${var.postgres_admin_user}:${local.pg_password}@${azurerm_postgresql_flexible_server.main.fqdn}:5432/${var.db_name}?sslmode=require"
+  value       = "postgresql://${var.postgres_admin_user}:${urlencode(local.pg_password)}@${azurerm_postgresql_flexible_server.main.fqdn}:5432/${var.db_name}?sslmode=require"
   sensitive   = true
 }
 
