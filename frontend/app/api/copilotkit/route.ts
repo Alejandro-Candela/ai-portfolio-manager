@@ -16,6 +16,7 @@ const runtime = new CopilotRuntime({
 const serviceAdapter = new ExperimentalEmptyAdapter();
 
 const handler = async (req: NextRequest) => {
+  // For discovery requests, delegate to CopilotRuntime which handles the protocol
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
     serviceAdapter,

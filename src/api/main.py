@@ -69,7 +69,7 @@ def create_app() -> FastAPI:
         path="/api/copilotkit",
     )
 
-    @app.get("/api/copilotkit/info")
+    @app.get("/api/copilotkit")
     async def copilotkit_discovery():
         """Metadata for CopilotKit agent discovery."""
         return {
