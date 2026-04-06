@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from langchain_core.messages import SystemMessage
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 
 from src.agents.llm import get_llm
@@ -84,7 +85,7 @@ def build_intake_graph() -> Any:
     builder.add_node("intake_chat", intake_chat_node)
     builder.add_edge(START, "intake_chat")
     builder.add_conditional_edges("intake_chat", should_continue)
-    return builder.compile()
+    return builder.compile(checkpointer=MemorySaver())
 
 
 intake_graph = build_intake_graph()
