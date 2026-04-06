@@ -15,7 +15,7 @@ const runtime = new CopilotRuntime({
 
 const serviceAdapter = new ExperimentalEmptyAdapter();
 
-export const POST = async (req: NextRequest) => {
+const handler = async (req: NextRequest) => {
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
     serviceAdapter,
@@ -23,3 +23,6 @@ export const POST = async (req: NextRequest) => {
   });
   return handleRequest(req);
 };
+
+export const POST = handler;
+export const GET = handler;
