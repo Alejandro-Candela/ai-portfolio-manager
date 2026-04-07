@@ -3,6 +3,7 @@ from __future__ import annotations
 import operator
 from typing import Annotated
 
+from copilotkit import CopilotKitState
 from langgraph.graph import MessagesState
 from pydantic import BaseModel
 
@@ -25,10 +26,10 @@ class UseCaseData(BaseModel):
     tenant_id: str = ""
 
 
-# State for intake graph
-class IntakeState(MessagesState):
-    use_case: UseCaseData | None
-    extraction_complete: bool
+# State for intake graph — uses CopilotKitState to receive frontend actions
+class IntakeState(CopilotKitState):
+    use_case: UseCaseData | None = None
+    extraction_complete: bool = False
 
 
 # State for each evaluator (fan-out subgraph)
