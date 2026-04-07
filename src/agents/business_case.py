@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from langchain_core.messages import HumanMessage, SystemMessage
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 
@@ -145,7 +146,7 @@ def build_business_case_graph() -> Any:
     builder.add_conditional_edges("critique", route_after_critique)
     builder.add_edge("hitl_review", END)
 
-    return builder.compile()
+    return builder.compile(checkpointer=MemorySaver())
 
 
 business_case_graph = build_business_case_graph()

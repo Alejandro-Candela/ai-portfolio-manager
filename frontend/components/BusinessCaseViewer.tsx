@@ -57,8 +57,18 @@ export function BusinessCaseViewer({ id }: Props) {
     setActionLoading(true);
     try {
       await api.businessCases.generate(id);
-      const bc = await api.businessCases.get(id);
-      setBusinessCase(bc);
+      // Poll until the background task persists the result (max ~60s)
+      let bc = null;
+      for (let attempt = 0; attempt < 20; attempt++) {
+        await new Promise((r) => setTimeout(r, 3000));
+        try {
+          bc = await api.businessCases.get(id);
+          break;
+        } catch {
+          // not ready yet, keep waiting
+        }
+      }
+      if (bc) setBusinessCase(bc);
     } finally {
       setActionLoading(false);
     }

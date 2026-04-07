@@ -6,6 +6,7 @@ import uuid
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from langgraph.errors import GraphInterrupt
 from pydantic import BaseModel
 
 from src.agents.business_case import business_case_graph
@@ -91,6 +92,7 @@ async def _run_business_case_graph(
     thread_id: str,
 ) -> None:
     """Run the business case graph until HITL interrupt."""
+    print(f"[BC] Starting background task for use_case_id={use_case_id}", flush=True)
     try:
         # Update status
         async with get_connection(tenant_id=tenant_id) as conn, conn.cursor() as cur:
@@ -113,10 +115,19 @@ async def _run_business_case_graph(
 
         config = {"configurable": {"thread_id": thread_id}}
 
-        # Run until interrupt (HITL)
-        result = await business_case_graph.ainvoke(initial_state, config=config)
-        draft = result.get("draft", "")
+        # Run until interrupt (HITL) — interrupt() raises GraphInterrupt
+        print(f"[BC] Invoking graph for use_case_id={use_case_id}", flush=True)
+        try:
+            result = await business_case_graph.ainvoke(initial_state, config=config)
+            draft = result.get("draft", "")
+            print(f"[BC] Graph complete, draft len={len(draft)}", flush=True)
+        except GraphInterrupt:
+            # Graph paused at HITL node — read draft from checkpointed state
+            print(f"[BC] GraphInterrupt caught, reading state", flush=True)
+            snapshot = await business_case_graph.aget_state(config)
+            draft = snapshot.values.get("draft", "")
 
+        print(f"[BC] Draft len={len(draft)}, proceeding to DB insert", flush=True)
         # Parse draft JSON
         draft_data = {}
         try:
@@ -179,7 +190,10 @@ async def _run_business_case_graph(
 
         logger.info("Business case ready for review: use case %s", use_case_id)
 
-    except Exception:
+    except Exception as e:
+        import traceback
+        print(f"[BC ERROR] use_case_id={use_case_id}: {type(e).__name__}: {e}")
+        traceback.print_exc()
         logger.exception("Business case generation failed for use case %s", use_case_id)
 
 
