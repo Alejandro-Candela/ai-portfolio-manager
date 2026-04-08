@@ -42,7 +42,7 @@ Enterprise organizations struggle to prioritize and evaluate AI initiatives acro
 
 ### Use Cases
 
-- **Internal backlogs**: Applied AI managing ~70 active AI initiatives
+- **Internal backlogs**: Enterprise managing ~70 active AI initiatives
 - **Consulting engagement**: Partner firms evaluating client portfolios
 - **Enterprise SaaS**: Large organizations with 100+ use cases across departments
 
@@ -83,6 +83,7 @@ Enterprise organizations struggle to prioritize and evaluate AI initiatives acro
 ### Key Patterns
 
 #### 1. Multi-Tenancy via PostgreSQL RLS
+
 ```python
 # Connection middleware sets session variable
 await conn.execute("SET app.tenant_id = %s", (tenant_id,))
@@ -90,6 +91,7 @@ await conn.execute("SET app.tenant_id = %s", (tenant_id,))
 ```
 
 #### 2. Parallel Evaluators via LangGraph Send API
+
 ```python
 def route_to_evaluators(state):
     return [
@@ -101,6 +103,7 @@ def route_to_evaluators(state):
 ```
 
 #### 3. Human-in-the-Loop via LangGraph Interrupt
+
 ```python
 def human_review_node(state):
     decision = interrupt({
@@ -115,6 +118,7 @@ def human_review_node(state):
 ## Tech Stack
 
 ### Backend
+
 - **FastAPI** (async web framework)
 - **LangGraph 1.0+** (agentic orchestration)
 - **LangChain** (LLM abstractions)
@@ -126,6 +130,7 @@ def human_review_node(state):
 - **PyJWT** (Entra ID tokens)
 
 ### Frontend
+
 - **Next.js 16** (React App Router)
 - **TypeScript** (strict mode)
 - **TailwindCSS** (styling)
@@ -259,14 +264,14 @@ POST /api/langgraph/intake/invoke   # AG-UI streaming endpoint
 
 ## Frontend Routes
 
-| Route | Component |
-|-------|-----------|
-| `/` | Redirect to `/portfolio` |
-| `/portfolio` | Scatter matrix |
-| `/pipeline` | Kanban board |
+| Route         | Component                   |
+| ------------- | --------------------------- |
+| `/`           | Redirect to `/portfolio`    |
+| `/portfolio`  | Scatter matrix              |
+| `/pipeline`   | Kanban board                |
 | `/cases/[id]` | Business case detail + HITL |
-| `/intake` | Conversational chat |
-| `/analytics` | Ranking table |
+| `/intake`     | Conversational chat         |
+| `/analytics`  | Ranking table               |
 
 ---
 
@@ -308,12 +313,14 @@ POSTGRES_DB=portfolio_db
 ## Known Limitations & Future Work
 
 ### Sprints 4–7 Roadmap
+
 - **Sprint 4** (Q2): Multi-language, dark mode, notifications
 - **Sprint 5** (Q2): RLS enforcement, Azure AI Search RAG, tenant admin
 - **Sprint 6** (Q3): Voice interviews, advanced analytics, Slack integration
 - **Sprint 7** (Q3–Q4): OpenTelemetry, Terraform IaC, comprehensive tests, security audit
 
 ### Current Issues
+
 1. HITL resume requires manual thread_id (will auto-resume in Sprint 7)
 2. Evaluator scores may drift without calibration feedback loop
 3. Scaling: PostgreSQL replicas needed for >100 concurrent users
@@ -330,6 +337,7 @@ POSTGRES_DB=portfolio_db
 5. Push and open PR to `main`
 
 **Checklist**:
+
 - [ ] All tests pass
 - [ ] Code formatted
 - [ ] No linter warnings
@@ -349,4 +357,4 @@ POSTGRES_DB=portfolio_db
 
 **Last Updated**: April 2, 2026  
 **Version**: 0.3.0 (Sprints 0–3 Complete)  
-**Maintainer**: Alejandro Candela (Applied AI)
+**Maintainer**: Alejandro Candela
